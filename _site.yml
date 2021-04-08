@@ -2,7 +2,7 @@ name: "seoul-busan"
 title: "My Website"
 description: |
   My Website
-output_dir: "_site"
+output_dir: "."
 navbar:
   right:
     - text: "Home"
