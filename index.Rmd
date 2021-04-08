@@ -1,15 +1,12 @@
 ---
-title: "My Website"
+title: "2021년 재보궐 선거"
 description: |
-  Welcome to the website. I hope you enjoy it!
+  2021년 서울/부산시장 재보궐 선거 데이터를 분석했습니다.
 site: distill::distill_website
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-
-# Learn more about creating websites with Distill at:
-# https://rstudio.github.io/distill/website.html
-
 ```
+
 

@@ -3,7 +3,7 @@
     "path": "~/swc/seoul-busan/_site.yml",
     "project_path": "_site.yml",
     "type": "yaml",
-    "hash": "0",
+    "hash": "2482794613",
     "contents": "",
     "dirty": false,
     "created": 1617870354035.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "12,0",
+        "cursorPosition": "10,17",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1617870554,
+    "lastKnownWriteTime": 1617870661,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1617870554962,
+    "last_content_update": 1617870661769,
     "read_only": false,
     "read_only_alternatives": []
 }
