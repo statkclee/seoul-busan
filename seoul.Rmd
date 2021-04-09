@@ -1,0 +1,69 @@
+---
+title: "서울시장"
+description: |
+  서울시장 민주당 박영선 후보와 국민의 힘 오세훈 후보 득표를 분석합니다.
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(rvest)
+library(httr)
+```
+
+
+# 자치구별 투표율 {#seoul-voting-rate}
+
+```{r seoul-voting-rate}
+library(tidyverse)
+library(rvest)
+library(reactable)
+
+## 위키백과 HTML 웹페이지 긁어오기
+seoul_wiki_url <- "https://ko.wikipedia.org/wiki/2021%EB%85%84_%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%EC%9E%A5_%EB%B3%B4%EA%B6%90%EC%84%A0%EA%B1%B0"
+
+seoul_wiki_html <- seoul_wiki_url %>% 
+  read_html() 
+
+## 투표수와 투표율 표 긁어내기
+seoul_vote_raw <- seoul_wiki_html %>% 
+  html_nodes(xpath = '//*[@id="mw-content-text"]/div[1]/table[8]') %>% 
+  html_table(fill = TRUE) %>% 
+  .[[1]] %>% 
+  as_tibble()
+
+## 투표수와 투표율 표 데이터 전처리
+seoul_vote_tbl <- seoul_vote_raw %>%
+  filter(구 != "서울특별시") %>% 
+  mutate(유권자 = parse_number(유권자),
+         투표수 = parse_number(투표수),
+         투표율 = parse_number(투표율) / 100) %>% 
+  mutate(서울권역 = case_when(구 %in% c("종로구", "중구", "용산구", "은평구", "서대문구", "마포구") ~ "강북서권",
+                              구 %in% c("성동구", "광진구", "동대문구", "중랑구", "성북구", "강북구", "도봉구", "노원구") ~ "강북동권",
+                              구 %in% c("양천구", "강서구", "구로구", "금천구", "영등포구", "동작구", "관악구") ~ "강남서권",
+                              구 %in% c("서초구", "강남구", "송파구", "강동구") ~ "강남동권")) %>% 
+  relocate(서울권역, .before = 구)
+ 
+
+## 투표수와 투표율 표 
+
+seoul_vote_tbl %>% 
+  reactable::reactable(
+    groupBy = "서울권역",
+    filterable = TRUE,
+    searchable = TRUE, minRows = 4,
+      columns = list(
+        서울권역 = colDef(minWidth = 160),
+        유권자 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        투표수 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        투표율 = colDef(minWidth = 140, format = colFormat(percent = TRUE, digits = 1), aggregate = "mean")
+      ),
+      bordered = TRUE,
+      highlight = TRUE
+)
+```
+
+
