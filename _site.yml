@@ -6,7 +6,11 @@ output_dir: "."
 navbar:
   right:
     - text: "데이터"
-      href: data.html
+      menu:
+      - text: "득표"
+        href: data.html
+      - text: "부동산"
+        href: apt.html
     - text: "서울시장"
       href: seoul.html
 output: distill::distill_article
