@@ -17,6 +17,9 @@ library(httr)
 
 # 자치구별 투표율 {#seoul-voting-rate}
 
+- 데이터: [2021년 서울특별시장 보궐선거](https://ko.wikipedia.org/wiki/2021%EB%85%84_%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%EC%9E%A5_%EB%B3%B4%EA%B6%90%EC%84%A0%EA%B1%B0)
+
+
 ```{r seoul-voting-rate}
 library(tidyverse)
 library(rvest)
@@ -28,12 +31,17 @@ seoul_wiki_url <- "https://ko.wikipedia.org/wiki/2021%EB%85%84_%EC%84%9C%EC%9A%B
 seoul_wiki_html <- seoul_wiki_url %>% 
   read_html() 
 
+Sys.setlocale("LC_ALL", locale = "C")
+
 ## 투표수와 투표율 표 긁어내기
 seoul_vote_raw <- seoul_wiki_html %>% 
   html_nodes(xpath = '//*[@id="mw-content-text"]/div[1]/table[8]') %>% 
   html_table(fill = TRUE) %>% 
   .[[1]] %>% 
   as_tibble()
+
+Sys.setlocale("LC_ALL", locale = "Korean")
+
 
 ## 투표수와 투표율 표 데이터 전처리
 seoul_vote_tbl <- seoul_vote_raw %>%
@@ -66,4 +74,89 @@ seoul_vote_tbl %>%
 )
 ```
 
+# 출구조사
+
+2021년 4월 7일 오전 6시부터 오후 7시까지 조사하였으며, 표본오차는 95% 신뢰수준, 서울 ± 1.7%p 부산 ± 2.3%p이다. 조사 장소는 서울 50개 투표소, 부산 30개 투표소이며, 조사 인원은 서울 10,114명, 부산 5,639명이다.
+
+
+# 구별 득표
+
+<https://ko.wikipedia.org/wiki/2021년_서울특별시장_보궐선거> 웹페이지에서 **자치구별 결과**를 가져온다.
+
+```{r gu-result}
+## 득표
+
+Sys.setlocale("LC_ALL", locale = "C")
+
+seoul_raw <- seoul_wiki_html %>% 
+  html_nodes(xpath = '//*[@id="mw-content-text"]/div[1]/div[4]/table/tbody/tr/td[1]/table') %>% 
+  html_table(fill = TRUE) %>% 
+  .[[1]] %>% 
+  janitor::clean_names() %>% 
+  as_tibble()
+
+Sys.setlocale("LC_ALL", locale = "Korean")
+
+## 투표수와 투표율 표 데이터 전처리
+seoul_tbl <- seoul_raw %>%
+  select(1, 2, 3, 5, 6) %>% 
+  set_names(c("구", "박영선", "오세훈", "박득표율", "오득표율")) %>% 
+  slice(2:n()) %>% 
+  filter(구 != "서울특별시") %>% 
+  mutate(박영선 = parse_number(박영선),
+         오세훈 = parse_number(오세훈),
+         박득표율 = parse_number(박득표율) /100,
+         오득표율 = parse_number(오득표율) /100) %>% 
+  mutate(서울권역 = case_when(구 %in% c("종로구", "중구", "용산구", "은평구", "서대문구", "마포구") ~ "강북서권",
+                              구 %in% c("성동구", "광진구", "동대문구", "중랑구", "성북구", "강북구", "도봉구", "노원구") ~ "강북동권",
+                              구 %in% c("양천구", "강서구", "구로구", "금천구", "영등포구", "동작구", "관악구") ~ "강남서권",
+                              구 %in% c("서초구", "강남구", "송파구", "강동구") ~ "강남동권")) %>% 
+  relocate(서울권역, .before = 구) 
+  
+
+seoul_tbl %>% 
+    reactable::reactable(
+    groupBy = "서울권역",
+    filterable = TRUE,
+    searchable = TRUE, minRows = 4,
+      columns = list(
+        서울권역 = colDef(minWidth = 160),
+        박영선 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        오세훈 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        박득표율 = colDef(minWidth = 140, format = colFormat(percent = TRUE, digits = 1), aggregate = "mean"),
+        오득표율 = colDef(minWidth = 140, format = colFormat(percent = TRUE, digits = 1), aggregate = "mean")
+      ),
+      bordered = TRUE,
+      highlight = TRUE
+)
+```
+
+# 투표구별 
+
+
+```{r seoul-voting-station}
+seoul_tbl <- read_rds("data/seoul_tbl.rds")
+
+seoul_tbl %>% 
+  mutate(표차이 = 국힘당 - 민주당) %>% 
+  select(-기권) %>% 
+    reactable::reactable(
+    groupBy = c("구명", "읍면동명", "투표구명"),
+    filterable = TRUE,
+    searchable = TRUE, 
+    defaultPageSize = 25,
+      columns = list(
+        구명 = colDef(minWidth = 100),
+        읍면동명 = colDef(minWidth = 160),
+        투표구명 = colDef(minWidth = 160),
+        선거인수 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        투표수 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        민주당 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        국힘당 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        표차이 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum")
+      ),
+      bordered = TRUE,
+      highlight = TRUE
+)
+```
 
