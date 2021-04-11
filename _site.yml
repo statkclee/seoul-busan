@@ -7,8 +7,10 @@ navbar:
   right:
     - text: "데이터"
       menu:
-      - text: "득표"
+      - text: "득표_2020"
         href: data.html
+      - text: "득표_2019"
+        href: data_2019.html
       - text: "부동산"
         href: apt.html
     - text: "서울시장"
