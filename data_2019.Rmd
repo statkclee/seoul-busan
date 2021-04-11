@@ -15,6 +15,90 @@ library(httr)
 
 ```
 
+# 선거구 {#electrics}
+
+<https://namu.wiki/w/제21대 국회의원 선거/지역구 국회의원/서울특별시> 나무위키에 나온 서울특별시 선거구를 활용하여 서울시 구별 선거구를 특정한다. 서울시는 25개 구로 구성된다. 중구, 성동구가 갑을로 합쳐져 있어 아래 24개 선거구로 구분된다.
+
+## 구별 선거구 {#gu-electrics}
+
+```{r seoul-precinct-gu}
+
+precint_raw <- tribble(~"선거구",
+                        "종로구",
+                        "중구·성동구 갑/을",
+                        "용산구",
+                        "광진구 갑/을",
+                        "동대문구 갑/을",
+                        "중랑구 갑/을",
+                        "성북구 갑/을",
+                        "강북구 갑/을",
+                        "도봉구 갑/을",
+                        "노원구 갑/을/병",
+                        "은평구 갑/을",
+                        "서대문구 갑/을",
+                        "마포구 갑/을",
+                        "양천구 갑/을",
+                        "강서구 갑/을/병",
+                        "구로구 갑/을",
+                        "금천구",
+                        "영등포구 갑/을",
+                        "동작구 갑/을",
+                        "관악구 갑/을",
+                        "서초구 갑/을",
+                        "강남구 갑/을/병",
+                        "송파구 갑/을/병",
+                        "강동구 갑/을")
+
+precint_tbl <- precint_raw %>% 
+  mutate(선거구_분리 = str_split(선거구, "/")) %>% 
+  mutate(선거구수    = map_int(선거구_분리, length)) %>% 
+  arrange(desc(선거구수))
+
+precint_tbl
+```
+
+
+
+## 서울 선거구 지도 {#gu-electrics}
+
+오마이뉴스에서 제작학 "2020. 4. 15. 21대 국회의원 총선거 선거구 지도"를 선거구 지도로 사용한다.
+
+- <https://github.com/OhmyNews/2020_21_elec_map> 
+
+```{r seoul-precinct-map-csv}
+precint_map_csv <- read_csv("data/2020_21_elec_map-master/21_SGG.csv")
+precint_map_csv
+```
+
+```{r precinct-map-sf}
+library(sf)
+
+precinct_sf <- sf::st_read("data/2020_21_elec_map-master/2020_21_elec_253_simple.json")
+
+seoul_precinct_sf <- precinct_sf %>% 
+  filter(SGG_1 == "서울") %>% 
+  mutate(선거구 = str_remove(SGG_2, "서울특별시 "))
+```
+
+
+
+```{r seoul-precinct-map-sf}
+library(ggrepel)
+
+seoul_precinct_sf %>% 
+  ggplot() +
+    geom_sf(aes(fill=선거구)) +
+    # geom_sf_label(aes(label = 선거구), family= "NanumGothic") +
+    theme_void(base_family = "NanumGothic") +
+    theme(legend.position = "none") +
+    ggrepel::geom_label_repel(
+      aes(label = 선거구, geometry = geometry),
+      stat = "sf_coordinates",
+      min.segment.length = 0, family= "NanumGothic",
+      size = 3) +
+    scale_fill_viridis_d()
+```
+
 
 
 # 서울시장
@@ -301,104 +385,313 @@ vote_tbl
 서울시 구는 국회의원을 1명 뽑는 1개 선거구를 갖는 경우와 2개 혹은 3개 국회의원을 선출하는 경우로 나눠져 있다.
 이를 위해서 구에 선거구가 하나인 경우과 다수인 경우를 나눠 살펴봐야 한다. 대표적으로 2개의 선거구를 갖느 ㄴ 광진구를 살펴보자.
 
-## 극회의원 - 광진구
+## 구별 득표율 데이터 가져오는 함수
 
-```{r type3-raw-data-pusan}
+```{r type3-get-raw-data}
 
-# 1. 데이터 받아오기 -----
-## 1.1 POST() 함수를 사용하여 개표 결과를 수집합니다.
-resp_2019 <- POST(
-    url = 'http://info.nec.go.kr/electioninfo/electionInfo_report.xhtml',
-    encode = 'form', 
-    body = list(
-       electionId = "0000000000",
-       requestURI = "/WEB-INF/jsp/electioninfo/0000000000/vc/vccp08.jsp",
-       topMenuId = "VC",
-       secondMenuId = "VCCP08",
-       menuId = "VCCP08",
-       statementId = "VCCP08_#1",
-       oldElectionType = "1",
-       electionType    = "2",
-       electionName    = "20200415",
-       electionCode = "2",
-       cityCode = "1100",
-       sggCityCode = "-1",
-       townCodeFromSgg = "-1",
-       townCode = "1105",
-       checkCityCode = "-1",
-       x = "52",
-       y = "10"
+get_votes_data <- function(gu_code){
+  # 1. 데이터 받아오기 -----
+  ## 1.1 POST() 함수를 사용하여 개표 결과를 수집합니다.
+  resp_2019 <- POST(
+      url = 'http://info.nec.go.kr/electioninfo/electionInfo_report.xhtml',
+      encode = 'form', 
+      body = list(
+         electionId = "0000000000",
+         requestURI = "/WEB-INF/jsp/electioninfo/0000000000/vc/vccp08.jsp",
+         topMenuId = "VC",
+         secondMenuId = "VCCP08",
+         menuId = "VCCP08",
+         statementId = "VCCP08_#1",
+         oldElectionType = "1",
+         electionType    = "2",
+         electionName    = "20200415",
+         electionCode = "2",
+         cityCode = "1100",
+         sggCityCode = "-1",
+         townCodeFromSgg = "-1",
+         townCode = gu_code,
+         checkCityCode = "-1",
+         x = "52",
+         y = "10"
+      )
     )
-  )
-
-## 1.2 JSON --> DataFrame 으로 변환합니다.
-
-Sys.setlocale("LC_ALL", local = "C")
-
-vote_raw <- content(x = resp_2019, as = 'text') %>% 
-  read_html() %>% 
-  html_node(xpath = '//*[@id="table01"]') %>% 
-  html_table(fill=TRUE) %>% 
-  janitor::clean_names() %>% 
-  as_tibble() 
-
-Sys.setlocale("LC_ALL", local = "Korean")
-
-## 1.3 데이터프레임을 두개로 나눈다.
-
-vote_temp_raw <- vote_raw %>% 
-  mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
-  mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
-  dplyr::group_split(seongeogumyeong)
   
+  ## 1.2 JSON --> DataFrame 으로 변환합니다.
+  
+  Sys.setlocale("LC_ALL", local = "C")
+  
+  vote_raw <- content(x = resp_2019, as = 'text') %>% 
+    read_html() %>% 
+    html_node(xpath = '//*[@id="table01"]') %>% 
+    html_table(fill=TRUE) %>% 
+    janitor::clean_names() %>% 
+    as_tibble() 
+  
+  Sys.setlocale("LC_ALL", local = "Korean")
 
-candidates <- vote_raw %>% 
-  filter(tupyogumyeong  == "")
-         
+  return(vote_raw)
+}
 
 
-```
-
-# 선거구 {#electrics}
-
-<https://namu.wiki/w/제21대 국회의원 선거/지역구 국회의원/서울특별시> 나무위키에 나온 서울특별시 선거구를 활용하여 서울시 구별 선거구를 특정한다. 서울시는 25개 구로 구성된다. 중구, 성동구가 갑을로 합쳐져 있어 아래 24개 선거구로 구분된다.
-
-
-```{r seoul-precinct}
-
-precint_raw <- tribble(~"선거구",
-                        "종로구",
-                        "중구·성동구 갑/을",
-                        "용산구",
-                        "광진구 갑/을",
-                        "동대문구 갑/을",
-                        "중랑구 갑/을",
-                        "성북구 갑/을",
-                        "강북구 갑/을",
-                        "도봉구 갑/을",
-                        "노원구 갑/을/병",
-                        "은평구 갑/을",
-                        "서대문구 갑/을",
-                        "마포구 갑/을",
-                        "양천구 갑/을",
-                        "강서구 갑/을/병",
-                        "구로구 갑/을",
-                        "금천구",
-                        "영등포구 갑/을",
-                        "동작구 갑/을",
-                        "관악구 갑/을",
-                        "서초구 갑/을",
-                        "강남구 갑/을/병",
-                        "송파구 갑/을/병",
-                        "강동구 갑/을")
-
-precint_tbl <- precint_raw %>% 
-  mutate(선거구_분리 = str_split(선거구, "/")) %>% 
-  mutate(선거구수    = map_int(선거구_분리, length)) %>% 
-  arrange(desc(선거구수))
-
-precint_tbl
+get_votes_data("1105")
 ```
 
 
+## 구별 선거구를 파악하는 함수
 
+### 선거구가 2개인 광진구
+
+```{r type3-identify-number-of-precinct}
+
+## 1.3 데이터프레임을 갑/을/병에 따라 쪼갠다.
+# 구별 선거구 숫자를 파악한다.
+
+precint_cnt_tbl <- precint_tbl %>% 
+  mutate(구명 = str_extract(선거구, ".*\\s")) %>% 
+  mutate(구명 = str_split(구명, "·")) %>% 
+  unnest(구명) %>% 
+  mutate(구명 = str_trim(구명)) %>% 
+  select(구명, 선거구수)
+
+precint_cnt_tbl %>% 
+  count(선거구수)
+
+# 데이터에서 구를 판별한다.
+
+vote_raw <- get_votes_data("1105")
+
+identified_precinct <- gu_raw_tbl %>% 
+  filter(seongeogumyeong != "",
+         seongeogumyeong != "선거구명") %>% 
+  count(seongeogumyeong) %>% 
+  nrow(.)
+
+identified_precinct
+
+transform_raw_data <- function(identified_precinct) {
+  
+    # 갑/을/병이 시작하는 위치
+    position_vec <- which(vote_raw$seongeogumyeong != "") - 1
+  
+  if(identified_precinct == 2) {
+    
+    GAP_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[2]:(position_vec[3]-1))
+    
+    EUL_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[3]:n())
+  }
+    return(list(GAP_tbl, EUL_tbl))
+}
+
+transform_raw_data(identified_precinct)
+```
+
+
+### 선거구가 3개인 강남구
+
+```{r type3-identify-number-of-precinct-gannam}
+
+## 1.3 데이터프레임을 갑/을/병에 따라 쪼갠다.
+# 데이터에서 구를 판별한다.
+
+vote_raw <- get_votes_data("1123")
+
+identified_precinct <- vote_raw %>% 
+  filter(seongeogumyeong != "",
+         seongeogumyeong != "선거구명") %>% 
+  count(seongeogumyeong) %>% 
+  nrow(.)
+
+identified_precinct
+
+transform_raw_data <- function(identified_precinct) {
+  
+    # 갑/을/병이 시작하는 위치
+    position_vec <- which(vote_raw$seongeogumyeong != "") - 1
+  
+  if(identified_precinct == 2) {
+    
+    GAP_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[2]:(position_vec[3]-1))
+    
+    EUL_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[3]:n())
+    
+    return(list(GAP_tbl, EUL_tbl))
+    
+  } else if(identified_precinct == 3) {
+
+    GAP_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[2]:(position_vec[3]-1))
+    
+    EUL_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[3]:(position_vec[4]-1))
+    
+    BYUNG_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[4]:n())
+    
+    return(list(GAP_tbl, EUL_tbl, BYUNG_tbl))
+  }
+}
+
+transform_raw_data(identified_precinct)
+```
+
+
+### 선거구가 1개인 중구
+
+```{r type3-identify-number-of-precinct-one}
+
+## 1.3 데이터프레임을 갑/을/병에 따라 쪼갠다.
+# 데이터에서 구를 판별한다.
+
+vote_raw <- get_votes_data("1101")
+
+identified_precinct <- vote_raw %>% 
+  filter(seongeogumyeong != "",
+         seongeogumyeong != "선거구명") %>% 
+  count(seongeogumyeong) %>% 
+  nrow(.)
+
+identified_precinct
+
+transform_raw_data <- function(identified_precinct) {
+  
+    # 갑/을/병이 시작하는 위치
+    position_vec <- which(vote_raw$seongeogumyeong != "") - 1
+  
+  if(identified_precinct == 2) {
+    
+    GAP_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[2]:(position_vec[3]))
+    
+    EUL_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[3]:n())
+    
+    return(list(GAP_tbl, EUL_tbl))
+    
+  } else if(identified_precinct == 3) {
+
+    GAP_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[2]:(position_vec[3]))
+    
+    EUL_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[3]:(position_vec[4]-1))
+    
+    BYUNG_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[4]:n())
+    
+    return(list(GAP_tbl, EUL_tbl, BYUNG_tbl))
+    
+  } else {
+    
+    return(list(vote_raw))
+    
+  }
+}
+
+transform_raw_data(identified_precinct)
+```
+
+
+## 전체 함수
+
+```{r type3-call-all}
+
+## 1.3 데이터프레임을 갑/을/병에 따라 쪼갠다.
+# 데이터에서 구를 판별한다.
+
+get_all_precints <- function(gu_code) {
+  
+  # 선관위에서 투표 원본 데이터를 가져온다.
+  vote_raw <- get_votes_data(gu_code)
+  
+  # 구별 선거구수를 파악한다.
+  identified_precinct <- vote_raw %>% 
+  filter(seongeogumyeong != "",
+         seongeogumyeong != "선거구명") %>% 
+  count(seongeogumyeong) %>% 
+  nrow(.)
+
+  # 갑/을/병이 시작하는 위치
+  position_vec <- which(vote_raw$seongeogumyeong != "") - 1
+  
+  # 선거구 숫자별로 각 선거구 데이터를 가져온다.
+  
+  if(identified_precinct == 2) {
+    
+    GAP_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[2]:(position_vec[3]))
+    
+    EUL_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[3]:n())
+    
+    return(list(GAP_tbl, EUL_tbl))
+    
+  } else if(identified_precinct == 3) {
+
+    GAP_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[2]:(position_vec[3]))
+    
+    EUL_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[3]:(position_vec[4]-1))
+    
+    BYUNG_tbl <- vote_raw %>% 
+      mutate(seongeogumyeong  = ifelse(seongeogumyeong  == "", NA, seongeogumyeong ))  %>% 
+      mutate(seongeogumyeong = zoo::na.locf(seongeogumyeong)) %>% 
+      slice(position_vec[4]:n())
+    
+    return(list(GAP_tbl, EUL_tbl, BYUNG_tbl))
+    
+  } else {
+    
+    return(list(vote_raw))
+    
+  }
+
+}
+
+
+seoul_precint_list <- map(gu_code, get_all_precints)
+
+seoul_precint_list %>% length
+
+seoul_precint_list[[23]]
+
+seoul_precint_list %>% 
+  write_rds("data/seoul_precint_list.rds")
+
+```
