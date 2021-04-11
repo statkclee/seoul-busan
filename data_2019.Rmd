@@ -451,7 +451,8 @@ precint_cnt_tbl <- precint_tbl %>%
   mutate(구명 = str_split(구명, "·")) %>% 
   unnest(구명) %>% 
   mutate(구명 = str_trim(구명)) %>% 
-  select(구명, 선거구수)
+  mutate(구명 = ifelse(is.na(구명), 선거구, 구명)) %>% 
+  select(구명, 선거구수) 
 
 precint_cnt_tbl %>% 
   count(선거구수)
@@ -621,7 +622,7 @@ transform_raw_data(identified_precinct)
 
 ## 전체 함수
 
-```{r type3-call-all}
+```{r type3-call-all, eval = FALSE}
 
 ## 1.3 데이터프레임을 갑/을/병에 따라 쪼갠다.
 # 데이터에서 구를 판별한다.
@@ -693,5 +694,175 @@ seoul_precint_list[[23]]
 
 seoul_precint_list %>% 
   write_rds("data/seoul_precint_list.rds")
+
+```
+
+# 후처리 {#postprocessing}
+
+## 구내부 선거구 하나 
+
+```{r post-processing}
+seoul_precint_list <- read_rds("data/seoul_precint_list.rds")
+
+## 1. 구 내부에 선거구가 하나인 경우 ----------------------
+single_precinct_raw <- seoul_precint_list[[1]] %>% .[[1]]
+
+vote_colnames <- single_precinct_raw  %>% slice(1) %>% unlist() %>% 
+  setdiff("후보자별 득표수") %>% append(c("무효투표수", "기권수"))
+
+vote_tbl <- single_precinct_raw %>% 
+    # 변수명
+    set_names(vote_colnames) %>% 
+    # 변수명 제거
+    slice(2:n()) %>% 
+    # 결측값 처리와 소계/계/잘못 인입 등 필터링
+    mutate(선거구명 = ifelse(선거구명 == "", NA, 선거구명)) %>% 
+    mutate(선거구명 = zoo::na.locf(선거구명)) %>% 
+    filter(투표구명 != "계",
+           투표구명 != "소계",
+           !str_detect(투표구명, "잘못")) %>% 
+    # 문자형 --> 숫자형
+    mutate_at(vars(!contains("구명")), parse_number)
+
+## 데이터를 확인합니다. ---------------------------------
+vote_tbl
+```
+
+
+## 구 선거구 2~3개 
+
+```{r post-processing-gu}
+seoul_precint_list <- read_rds("data/seoul_precint_list.rds")
+
+## 1. 구 내부에 선거구가 하나인 경우 ----------------------
+two_precinct_raw <- seoul_precint_list[[5]] %>% .[[2]]
+
+## 2. 변수명 생성작업 ----------------------
+header_colnames <- c("선거구명", "투표구명", "선거인수", "투표수")
+body_colnames <- two_precinct_raw %>% slice(1) %>% unlist() %>% 
+  setdiff(c("선거구명", "", "계"))
+footer_colnames <- c("계", "무효투표수", "기권수")
+
+full_colnames <- header_colnames %>%  append(body_colnames) %>% append(footer_colnames)
+
+## 3. 데이터프레임 작업 ----------------------
+vote_tbl <- two_precinct_raw %>% 
+    # 변수명
+    set_names(full_colnames) %>% 
+    # 변수명 제거
+    slice(2:n()) %>% 
+    # 결측값 처리와 소계/계/잘못 인입 등 필터링
+    mutate(선거구명 = ifelse(선거구명 == "", NA, 선거구명)) %>% 
+    mutate(선거구명 = zoo::na.locf(선거구명)) %>% 
+    filter(투표구명 != "계",
+           투표구명 != "소계",
+           투표구명 != "",
+           !str_detect(투표구명, "잘못")) %>% 
+    # 문자형 --> 숫자형
+    mutate_at(vars(!contains("구명")), parse_number)
+
+## 데이터를 확인합니다. ---------------------------------
+vote_tbl
+```
+
+상기 코드를 구에 선거구가 2개 있는 경우 각각을 처리해서 깔끔한 데이터프레임으로 만들어내는 함수를 작성한다.
+
+```{r make-function}
+
+clean_vote_tbl <- function(precinct) {
+  ## 1. 구 내부에 선거구가 하나인 경우 ----------------------
+  two_precinct_raw <- seoul_precint_list[[23]] %>% .[[precinct]]
+  
+  ## 2. 변수명 생성작업 ----------------------
+  header_colnames <- c("선거구명", "투표구명", "선거인수", "투표수")
+  body_colnames <- two_precinct_raw %>% slice(1) %>% unlist() %>% 
+    setdiff(c("선거구명", "", "계"))
+  footer_colnames <- c("계", "무효투표수", "기권수")
+  
+  full_colnames <- header_colnames %>%  append(body_colnames) %>% append(footer_colnames)
+  
+  ## 3. 데이터프레임 작업 ----------------------
+  vote_tbl <- two_precinct_raw %>% 
+      # 변수명
+      set_names(full_colnames) %>% 
+      # 변수명 제거
+      slice(2:n()) %>% 
+      # 결측값 처리와 소계/계/잘못 인입 등 필터링
+      mutate(선거구명 = ifelse(선거구명 == "", NA, 선거구명)) %>% 
+      mutate(선거구명 = zoo::na.locf(선거구명)) %>% 
+      filter(투표구명 != "계",
+             투표구명 != "소계",
+             투표구명 != "",
+             !str_detect(투표구명, "잘못")) %>% 
+      # 문자형 --> 숫자형
+      mutate_at(vars(!contains("구명")), parse_number)
+  
+  ## 데이터를 확인합니다. ---------------------------------
+  return(vote_tbl)
+}
+
+clean_vote_tbl(1)
+```
+
+구별 선거구를 정제하는 함수를 작성한다.
+
+
+```{r make-clean-function}
+clean_precinct_tbl <- function(gu_tbl, precinct) {
+  
+  clean_list <- list()
+  
+  for(i in seq(1, precinct)) {
+      ## 1. 구 내부에 선거구가 하나인 경우 ----------------------
+    two_precinct_raw <- gu_tbl %>% .[[precinct]]
+    
+    ## 2. 변수명 생성작업 ----------------------
+    header_colnames <- c("선거구명", "투표구명", "선거인수", "투표수")
+    body_colnames <- two_precinct_raw %>% slice(1) %>% unlist() %>% 
+      setdiff(c("선거구명", "", "계"))
+    footer_colnames <- c("계", "무효투표수", "기권수")
+    
+    full_colnames <- header_colnames %>%  append(body_colnames) %>% append(footer_colnames)
+    
+    ## 3. 데이터프레임 작업 ----------------------
+    vote_tbl <- two_precinct_raw %>% 
+        # 변수명
+        set_names(full_colnames) %>% 
+        # 변수명 제거
+        slice(2:n()) %>% 
+        # 결측값 처리와 소계/계/잘못 인입 등 필터링
+        mutate(선거구명 = ifelse(선거구명 == "", NA, 선거구명)) %>% 
+        mutate(선거구명 = zoo::na.locf(선거구명)) %>% 
+        filter(투표구명 != "계",
+               투표구명 != "소계",
+               투표구명 != "",
+               !str_detect(투표구명, "잘못")) %>% 
+        # 문자형 --> 숫자형
+        mutate_at(vars(!contains("구명")), parse_number)
+    
+    clean_list[[precinct]] <- vote_tbl
+
+  }
+  
+  ## 데이터를 확인합니다. ---------------------------------
+  return(clean_list)
+}
+
+clean_precinct_tbl(seoul_precint_list[[23]], precinct = 3)
+
+
+precinct_number <- map_int(seoul_precint_list, length)
+
+gu_precinct_tbl <- tibble(gu_name      = gu_name_tbl$구명,
+                          precinct_cnt = precinct_number,
+                          raw_list      = seoul_precint_list)
+
+clean_precinct_tbl(seoul_precint_list[[5]], 1)
+
+map2(seoul_precint_list, precinct_number, clean_precinct_tbl)
+
+gu_precinct_tbl %>% 
+  expand(precinct_cnt)
+
 
 ```
