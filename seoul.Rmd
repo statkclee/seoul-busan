@@ -7,12 +7,15 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+options(width = 999)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      cache = FALSE, tidy = FALSE, size = "small")
 
 library(tidyverse)
 library(rvest)
 library(httr)
 ```
+
 
 
 # 자치구별 투표율 {#seoul-voting-rate}
@@ -31,7 +34,7 @@ seoul_wiki_url <- "https://ko.wikipedia.org/wiki/2021%EB%85%84_%EC%84%9C%EC%9A%B
 seoul_wiki_html <- seoul_wiki_url %>% 
   read_html() 
 
-Sys.setlocale("LC_ALL", locale = "C")
+# Sys.setlocale("LC_ALL", locale = "C")
 
 ## 투표수와 투표율 표 긁어내기
 seoul_vote_raw <- seoul_wiki_html %>% 
@@ -40,7 +43,7 @@ seoul_vote_raw <- seoul_wiki_html %>%
   .[[1]] %>% 
   as_tibble()
 
-Sys.setlocale("LC_ALL", locale = "Korean")
+# Sys.setlocale("LC_ALL", locale = "Korean")
 
 
 ## 투표수와 투표율 표 데이터 전처리
@@ -86,7 +89,7 @@ seoul_vote_tbl %>%
 ```{r gu-result}
 ## 득표
 
-Sys.setlocale("LC_ALL", locale = "C")
+# Sys.setlocale("LC_ALL", locale = "C")
 
 seoul_raw <- seoul_wiki_html %>% 
   html_nodes(xpath = '//*[@id="mw-content-text"]/div[1]/div[4]/table/tbody/tr/td[1]/table') %>% 
@@ -95,7 +98,7 @@ seoul_raw <- seoul_wiki_html %>%
   janitor::clean_names() %>% 
   as_tibble()
 
-Sys.setlocale("LC_ALL", locale = "Korean")
+# Sys.setlocale("LC_ALL", locale = "Korean")
 
 ## 투표수와 투표율 표 데이터 전처리
 seoul_tbl <- seoul_raw %>%
@@ -134,7 +137,9 @@ seoul_tbl %>%
 # 투표구별 
 
 
-```{r seoul-voting-station}
+
+
+```{r seoul-voting-station, R.options = list(width = 500)}
 seoul_tbl <- read_rds("data/seoul_tbl.rds")
 
 seoul_tbl %>% 
@@ -147,13 +152,13 @@ seoul_tbl %>%
     defaultPageSize = 25,
       columns = list(
         구명 = colDef(minWidth = 100),
-        읍면동명 = colDef(minWidth = 160),
-        투표구명 = colDef(minWidth = 160),
-        선거인수 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
-        투표수 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
-        민주당 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
-        국힘당 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
-        표차이 = colDef(minWidth = 140, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum")
+        읍면동명 = colDef(minWidth = 140),
+        투표구명 = colDef(minWidth = 140),
+        선거인수 = colDef(minWidth = 100, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        투표수 = colDef(minWidth = 100, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        민주당 = colDef(minWidth = 100, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        국힘당 = colDef(minWidth = 100, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum"),
+        표차이 = colDef(minWidth = 100, format = colFormat(separators = TRUE, digits = 0), aggregate = "sum")
       ),
       bordered = TRUE,
       highlight = TRUE
