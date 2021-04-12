@@ -1,3 +1,5 @@
+~%2Fswc%2Fseoul-busan%2F.gitignore="45B946EA"
+~%2Fswc%2Fseoul-busan%2F.gitignore.R="EE669F3B"
 ~%2Fswc%2Fseoul-busan%2F_site.yml="C07EBC99"
 ~%2Fswc%2Fseoul-busan%2Fabout.Rmd="FA31FCD6"
 ~%2Fswc%2Fseoul-busan%2Fapt.Rmd="FE9F9D3B"
@@ -5,4 +7,5 @@
 ~%2Fswc%2Fseoul-busan%2Fdata_2019.Rmd="9463D639"
 ~%2Fswc%2Fseoul-busan%2Findex.Rmd="0EC46B3C"
 ~%2Fswc%2Fseoul-busan%2Fposter.Rmd="F8CB3EED"
+~%2Fswc%2Fseoul-busan%2Fscript%2Fcrawl_posters.R="7D79EEA2"
 ~%2Fswc%2Fseoul-busan%2Fseoul.Rmd="E1C40313"
