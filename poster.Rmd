@@ -1,0 +1,147 @@
+---
+title: "선거벽보"
+description: |
+  선관위 웹사이트에서 공개된 선거벽보를 데이터로 만듧니다.
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(rvest)
+library(httr)
+
+```
+
+
+# 데이터 {#poster-data}
+
+중앙선거관리위원회 선거정보도서관, ["후보자 선전물"](http://elecinfo.nec.go.kr/neweps/3/1/paper.do) 벽보, 공보, 공약서 등 후보자 선전물 검색하여 데이터로 만듧니다.
+
+## 제 19 대 대통령 {#president-19}
+
+```{r crawl-poster}
+library(tidyverse)
+library(rvest)
+library(httr)
+
+poster_url <- "http://elecinfo.nec.go.kr/neweps/3/1/paperSearch.do?chs=&page=&epType=&start_file_sn=&end_file_sn=&svc_path_nm=&epid=&candidate_nm=&elect_ymd=&epdata_id=&ctl_no_id=&elect_sn=&party_nm=&win_yn=&elecDe=&turnDe=%B4%EB%C5%EB%B7%C9%BC%B1%B0%C5&elecType=10&code_id=10++&elecTypeMax=20&turnType=EPS0410++&cityType=EPS041019&guType=&sign_id=19&sido_nm=&elect_region_nm=&fieldName=candidate_nm&category=tms120tbl&myScraps=&kwd=&elecTypes=10&electionType=on&electionTurn=on&pageSize=20&order=elect_ymd&order_sort=desc"
+
+poster_text <- poster_url %>% 
+  read_html() %>% 
+  html_nodes(xpath = '//*[@id="content"]/div[5]/ul') %>% 
+  html_nodes(css = "li") %>% 
+  html_nodes(css = "input") %>% 
+  html_attr("value")
+
+poster_list <- poster_text %>% 
+  str_split(pattern = "(\\s+\\|\\s+)|(,)")
+
+map(poster_list, str_remove, pattern = "|")  
+map_chr(poster_list, 1)
+map_chr(poster_list, 3)
+
+poster_president_19_tbl <- tibble(후보      = map_chr(poster_list, 1),
+                                  선거일    = map_chr(poster_list, 2),
+                                  선거      = map_chr(poster_list, 3),
+                                  선거구분  = map_chr(poster_list, 4),
+                                  구분1     = map_chr(poster_list, 5),
+                                  구분2     = map_chr(poster_list, 6),
+                                  기호      = map_chr(poster_list, 7),
+                                  정당      = map_chr(poster_list, 8),
+                                  당락      = map_chr(poster_list, 9))
+
+poster_president_19_tbl %>% 
+  write_csv("data/poster_president_19_tbl.csv")
+
+```
+
+
+## 대통령 포스터 함수 {#president-poster-function}
+
+대통령 선거는 1대부터 19대까지 진행되었습니다. 이에 따라 특정 대통령 선거를 넣게 되면 당선자 및 낙선자 기호 정당 등 관련 정보를 크롤링 하도록 코드를 작성한다.
+
+```{r crawl-poster-number}
+
+p_number <- 17
+
+president_poster_url <- glue::glue("http://elecinfo.nec.go.kr/neweps/3/1/paperSearch.do?chs=&page=&epType=&start_file_sn=&end_file_sn=&svc_path_nm=&epid=&candidate_nm=&elect_ymd=&epdata_id=&ctl_no_id=&elect_sn=&party_nm=&win_yn=&elecDe=&turnDe=%B4%EB%C5%EB%B7%C9%BC%B1%B0%C5&elecType=10&code_id=10++&elecTypeMax=20&turnType=EPS0410++&cityType=EPS0410{p_number}&guType=&sign_id={p_number}&sido_nm=&elect_region_nm=&fieldName=candidate_nm&category=tms120tbl&myScraps=&kwd=&elecTypes=10&electionType=on&electionTurn=on&pageSize=20&order=elect_ymd&order_sort=desc")
+
+poster_text <- president_poster_url %>% 
+  read_html() %>% 
+  html_nodes(xpath = '//*[@id="content"]/div[5]/ul') %>% 
+  html_nodes(css = "li") %>% 
+  html_nodes(css = "input") %>% 
+  html_attr("value")
+
+poster_list <- poster_text %>% 
+  str_split(pattern = "(\\s+\\|\\s+)|(,)")
+
+poster_president_tbl <- tibble(후보      = map_chr(poster_list, 1),
+                               선거일    = map_chr(poster_list, 2),
+                               선거      = map_chr(poster_list, 3),
+                               선거구분  = map_chr(poster_list, 4),
+                               구분1     = map_chr(poster_list, 5),
+                               구분2     = map_chr(poster_list, 6),
+                               기호      = map_chr(poster_list, 7),
+                               정당      = map_chr(poster_list, 8),
+                               당락      = map_chr(poster_list, 9))
+
+poster_president_tbl
+```
+
+함수를 작성하여 테스트 한다.
+
+```{r crawl-poster-number-function}
+
+get_poster_info <- function(p_number) {
+
+  president_poster_url <- glue::glue("http://elecinfo.nec.go.kr/neweps/3/1/paperSearch.do?chs=&page=&epType=&start_file_sn=&end_file_sn=&svc_path_nm=&epid=&candidate_nm=&elect_ymd=&epdata_id=&ctl_no_id=&elect_sn=&party_nm=&win_yn=&elecDe=&turnDe=%B4%EB%C5%EB%B7%C9%BC%B1%B0%C5&elecType=10&code_id=10++&elecTypeMax=20&turnType=EPS0410++&cityType=EPS0410{p_number}&guType=&sign_id={p_number}&sido_nm=&elect_region_nm=&fieldName=candidate_nm&category=tms120tbl&myScraps=&kwd=&elecTypes=10&electionType=on&electionTurn=on&pageSize=20&order=elect_ymd&order_sort=desc")
+  
+  poster_text <- president_poster_url %>% 
+    read_html() %>% 
+    html_nodes(xpath = '//*[@id="content"]/div[5]/ul') %>% 
+    html_nodes(css = "li") %>% 
+    html_nodes(css = "input") %>% 
+    html_attr("value")
+  
+  poster_list <- poster_text %>% 
+    str_split(pattern = "(\\s+\\|\\s+)|(,)")
+  
+  poster_president_tbl <- tibble(후보      = map_chr(poster_list, 1),
+                                 선거일    = map_chr(poster_list, 2),
+                                 선거      = map_chr(poster_list, 3),
+                                 선거구분  = map_chr(poster_list, 4),
+                                 구분1     = map_chr(poster_list, 5),
+                                 구분2     = map_chr(poster_list, 6),
+                                 기호      = map_chr(poster_list, 7),
+                                 정당      = map_chr(poster_list, 8),
+                                 당락      = map_chr(poster_list, 9))
+  
+  return(poster_president_tbl)
+}
+
+get_poster_info(6)
+```
+
+일부 대통령 선거 데이터가 빠져 있어 6대, 12~19대까지 포스터를 데이터프레임으로 데이터화한다.
+
+```{r get-all-poster-tbl, eval = FALSE}
+
+all_poster_tbl <- map_df(1:19, get_poster_info)
+
+all_poster_tbl %>% 
+  write_csv("data/all_poster_tbl.csv")
+```
+
+# 포스트 데이터프레임 {#poster-dataframe}
+
+```{r post-data-frame}
+all_poster_tbl <- read_csv("data/all_poster_tbl.csv")
+
+all_poster_tbl %>% 
+  reactable::reactable()
+```
+

@@ -86,7 +86,7 @@ seoul_vote_tbl %>%
 
 <https://ko.wikipedia.org/wiki/2021년_서울특별시장_보궐선거> 웹페이지에서 **자치구별 결과**를 가져온다.
 
-```{r gu-result}
+```{r gu-result, eval = FALSE}
 ## 득표
 
 # Sys.setlocale("LC_ALL", locale = "C")
@@ -139,7 +139,7 @@ seoul_tbl %>%
 
 
 
-```{r seoul-voting-station, R.options = list(width = 500)}
+```{r seoul-voting-station, R.options = list(width = 500), eval=FALSE}
 seoul_tbl <- read_rds("data/seoul_tbl.rds")
 
 seoul_tbl %>% 

@@ -11,6 +11,8 @@ navbar:
         href: data.html
       - text: "득표_2019"
         href: data_2019.html
+      - text: "벽보"
+        href: poster.html
       - text: "부동산"
         href: apt.html
     - text: "서울시장"
