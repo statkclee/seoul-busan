@@ -2218,7 +2218,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre><code> [1] &quot;19대&quot; &quot;19대&quot; &quot;19대&quot; &quot;19대&quot; &quot;19대&quot; &quot;19대&quot; &quot;19대&quot; &quot;19대&quot; &quot;19대&quot;
 [10] &quot;19대&quot; &quot;19대&quot; &quot;19대&quot; &quot;19대&quot;</code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>poster_president_19_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/tibble.html'>tibble</a></span><span class='op'>(</span>후보      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>1</span><span class='op'>)</span>,
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>poster_president_19_tbl</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='op'>(</span>후보      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>1</span><span class='op'>)</span>,
                                   선거일    <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>2</span><span class='op'>)</span>,
                                   선거      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>3</span><span class='op'>)</span>,
                                   선거구분  <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>4</span><span class='op'>)</span>,
@@ -2251,7 +2251,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span class='va'>poster_list</span> <span class='op'>&lt;-</span> <span class='va'>poster_text</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>str_split</span><span class='op'>(</span>pattern <span class='op'>=</span> <span class='st'>"(\\s+\\|\\s+)|(,)"</span><span class='op'>)</span>
 
-<span class='va'>poster_president_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/tibble.html'>tibble</a></span><span class='op'>(</span>후보      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>1</span><span class='op'>)</span>,
+<span class='va'>poster_president_tbl</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='op'>(</span>후보      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>1</span><span class='op'>)</span>,
                                선거일    <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>2</span><span class='op'>)</span>,
                                선거      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>3</span><span class='op'>)</span>,
                                선거구분  <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>4</span><span class='op'>)</span>,
@@ -2297,7 +2297,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <span class='va'>poster_list</span> <span class='op'>&lt;-</span> <span class='va'>poster_text</span> <span class='op'>%&gt;%</span> 
     <span class='fu'>str_split</span><span class='op'>(</span>pattern <span class='op'>=</span> <span class='st'>"(\\s+\\|\\s+)|(,)"</span><span class='op'>)</span>
   
-  <span class='va'>poster_president_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/tibble.html'>tibble</a></span><span class='op'>(</span>후보      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  <span class='va'>poster_president_tbl</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='op'>(</span>후보      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>1</span><span class='op'>)</span>,
                                  선거일    <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>2</span><span class='op'>)</span>,
                                  선거      <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>3</span><span class='op'>)</span>,
                                  선거구분  <span class='op'>=</span> <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>poster_list</span>, <span class='fl'>4</span><span class='op'>)</span>,
@@ -2334,7 +2334,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </code></pre>
 </div>
 </div>
-<h1 id="poster-dataframe">포스트 데이터프레임</h1>
+<h2 id="poster-dataframe">포스트 데이터프레임</h2>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>all_poster_tbl</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"data/all_poster_tbl.csv"</span><span class='op'>)</span>
@@ -2343,10 +2343,185 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <span class='fu'>reactable</span><span class='fu'>::</span><span class='fu'><a href='https://glin.github.io/reactable/reference/reactable.html'>reactable</a></span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<div id="htmlwidget-80046e89cbcf6ea8ea39" class="reactable html-widget" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-80046e89cbcf6ea8ea39">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"후보":["이세진","전진한","윤보선","서민호","김준연","박정희","오재영","김종철","김의택","유치송","전두환","노태우","김영삼","김대중","김종필","홍숙자","김선적","신정일","백기완","김영삼","김대중","정주영","이종찬","박찬종","이병호","김옥선","백기완","이회창","김대중","이인제","권영길","허경영","김한식","신정일","이회창","노무현","이한동","권영길","김영규","김길수","장세동","정동영","금민","이수성","이회창","이명박","권영길","이인제","심대평","문국현","정근모","허경영","전관","박근혜","문재인","이정희","박종선","김소연","강지원","김순자","문재인","김선동","이경희","윤홍식","김민찬","홍준표","안철수","유승민","심상정","조원진","오영국","장성민","이재오"],"선거일":["1967.05.03","1967.05.03","1967.05.03","1967.05.03","1967.05.03","1967.05.03","1967.05.03","1981.02.25","1981.02.25","1981.02.25","1981.02.25","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1997.12.18","1997.12.18","1997.12.18","1997.12.18","1997.12.18","1997.12.18","1997.12.18","2002.12.19","2002.12.19","2002.12.19","2002.12.19","2002.12.19","2002.12.19","2002.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2012.12.19","2012.12.19","2012.12.19","2012.12.19","2012.12.19","2012.12.19","2012.12.19","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09"],"선거":["6대","6대","6대","6대","6대","6대","6대","12대","12대","12대","12대","13대","13대","13대","13대","13대","13대","13대","13대","14대","14대","14대","14대","14대","14대","14대","14대","15대","15대","15대","15대","15대","15대","15대","16대","16대","16대","16대","16대","16대","16대","17대","17대","17대","17대","17대","17대","17대","17대","17대","17대","17대","17대","18대","18대","18대","18대","18대","18대","18대","19대","19대","19대","19대","19대","19대","19대","19대","19대","19대","19대","19대","19대"],"선거구분":["대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거"],"구분1":["전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국"],"구분2":["전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국"],"기호":["기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 1번","기호 2번","기호 3번","기호 4번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 8번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 8번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 1번","기호 10번","기호 11번","기호 12번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 8번","기호 9번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 1번","기호 10번","기호 12번","기호 14번","기호 15번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 8번","기호 9번"],"정당":["정의당","한국독립당","신민당","대중당","민중당","민주공화당","통한당","국민당","민권당","민주한국당","민주정의당","민주정의당","통일민주당","평화민주당","신민주공화당","사회민주당","일체민주당","한주의통일한국당","무소속","민주자유당","민주당","통일국민당","새한국당","신정치개혁당","대한정의당","무소속","무소속","한나라당","새정치국민회의","국민신당","국민승리21","공화당","바른나라정치연합","통일한국당","한나라당","새천년민주당","하나로국민연합","민주노동당","사회당","호국당","무소속","대통합민주신당","한국사회당","국민연대","무소속","한나라당","민주노동당","민주당","국민중심당","창조한국당","참주인연합","경제공화당","새시대참사람연합","새누리당","민주통합당","통합진보당","무소속","무소속","무소속","무소속","더불어민주당","민중연합당","한국국민당","홍익당","무소속","자유한국당","국민의당","바른정당","정의당","새누리당","경제애국당","국민대통합당","늘푸른한국당"],"당락":["낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","당선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선"]},"columns":[{"accessor":"후보","name":"후보","type":"character"},{"accessor":"선거일","name":"선거일","type":"character"},{"accessor":"선거","name":"선거","type":"character"},{"accessor":"선거구분","name":"선거구분","type":"character"},{"accessor":"구분1","name":"구분1","type":"character"},{"accessor":"구분2","name":"구분2","type":"character"},{"accessor":"기호","name":"기호","type":"character"},{"accessor":"정당","name":"정당","type":"character"},{"accessor":"당락","name":"당락","type":"character"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"2eb904d9195a775cc0ee00fdf39b39e7","key":"2eb904d9195a775cc0ee00fdf39b39e7"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-94a08f23e42fbe4e3f29" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-94a08f23e42fbe4e3f29">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"후보":["이세진","전진한","윤보선","서민호","김준연","박정희","오재영","김종철","김의택","유치송","전두환","노태우","김영삼","김대중","김종필","홍숙자","김선적","신정일","백기완","김영삼","김대중","정주영","이종찬","박찬종","이병호","김옥선","백기완","이회창","김대중","이인제","권영길","허경영","김한식","신정일","이회창","노무현","이한동","권영길","김영규","김길수","장세동","정동영","금민","이수성","이회창","이명박","권영길","이인제","심대평","문국현","정근모","허경영","전관","박근혜","문재인","이정희","박종선","김소연","강지원","김순자","문재인","김선동","이경희","윤홍식","김민찬","홍준표","안철수","유승민","심상정","조원진","오영국","장성민","이재오"],"선거일":["1967.05.03","1967.05.03","1967.05.03","1967.05.03","1967.05.03","1967.05.03","1967.05.03","1981.02.25","1981.02.25","1981.02.25","1981.02.25","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1987.12.16","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1992.12.18","1997.12.18","1997.12.18","1997.12.18","1997.12.18","1997.12.18","1997.12.18","1997.12.18","2002.12.19","2002.12.19","2002.12.19","2002.12.19","2002.12.19","2002.12.19","2002.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2007.12.19","2012.12.19","2012.12.19","2012.12.19","2012.12.19","2012.12.19","2012.12.19","2012.12.19","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09","2017.05.09"],"선거":["6대","6대","6대","6대","6대","6대","6대","12대","12대","12대","12대","13대","13대","13대","13대","13대","13대","13대","13대","14대","14대","14대","14대","14대","14대","14대","14대","15대","15대","15대","15대","15대","15대","15대","16대","16대","16대","16대","16대","16대","16대","17대","17대","17대","17대","17대","17대","17대","17대","17대","17대","17대","17대","18대","18대","18대","18대","18대","18대","18대","19대","19대","19대","19대","19대","19대","19대","19대","19대","19대","19대","19대","19대"],"선거구분":["대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거","대통령선거"],"구분1":["전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국"],"구분2":["전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국","전국"],"기호":["기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 1번","기호 2번","기호 3번","기호 4번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 8번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 8번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 1번","기호 10번","기호 11번","기호 12번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 8번","기호 9번","기호 1번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 1번","기호 10번","기호 12번","기호 14번","기호 15번","기호 2번","기호 3번","기호 4번","기호 5번","기호 6번","기호 7번","기호 8번","기호 9번"],"정당":["정의당","한국독립당","신민당","대중당","민중당","민주공화당","통한당","국민당","민권당","민주한국당","민주정의당","민주정의당","통일민주당","평화민주당","신민주공화당","사회민주당","일체민주당","한주의통일한국당","무소속","민주자유당","민주당","통일국민당","새한국당","신정치개혁당","대한정의당","무소속","무소속","한나라당","새정치국민회의","국민신당","국민승리21","공화당","바른나라정치연합","통일한국당","한나라당","새천년민주당","하나로국민연합","민주노동당","사회당","호국당","무소속","대통합민주신당","한국사회당","국민연대","무소속","한나라당","민주노동당","민주당","국민중심당","창조한국당","참주인연합","경제공화당","새시대참사람연합","새누리당","민주통합당","통합진보당","무소속","무소속","무소속","무소속","더불어민주당","민중연합당","한국국민당","홍익당","무소속","자유한국당","국민의당","바른정당","정의당","새누리당","경제애국당","국민대통합당","늘푸른한국당"],"당락":["낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","당선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","당선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선","낙선"]},"columns":[{"accessor":"후보","name":"후보","type":"character"},{"accessor":"선거일","name":"선거일","type":"character"},{"accessor":"선거","name":"선거","type":"character"},{"accessor":"선거구분","name":"선거구분","type":"character"},{"accessor":"구분1","name":"구분1","type":"character"},{"accessor":"구분2","name":"구분2","type":"character"},{"accessor":"기호","name":"기호","type":"character"},{"accessor":"정당","name":"정당","type":"character"},{"accessor":"당락","name":"당락","type":"character"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"2eb904d9195a775cc0ee00fdf39b39e7","key":"2eb904d9195a775cc0ee00fdf39b39e7"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h1 id="선거-벽보-이미지">선거 벽보 이미지</h1>
+<h2 id="벽보-이미지-위치">벽보 이미지 위치</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>poster_url</span> <span class='op'>&lt;-</span> <span class='st'>"http://elecinfo.nec.go.kr/neweps/3/1/paperSearch.do?chs=&amp;page=&amp;epType=&amp;start_file_sn=&amp;end_file_sn=&amp;svc_path_nm=&amp;epid=&amp;candidate_nm=&amp;elect_ymd=&amp;epdata_id=&amp;ctl_no_id=&amp;elect_sn=&amp;party_nm=&amp;win_yn=&amp;elecDe=&amp;turnDe=%B4%EB%C5%EB%B7%C9%BC%B1%B0%C5&amp;elecType=10&amp;code_id=10++&amp;elecTypeMax=20&amp;turnType=EPS0410++&amp;cityType=EPS041019&amp;guType=&amp;sign_id=19&amp;sido_nm=&amp;elect_region_nm=&amp;fieldName=candidate_nm&amp;category=tms120tbl&amp;myScraps=&amp;kwd=&amp;elecTypes=10&amp;electionType=on&amp;electionTurn=on&amp;pageSize=20&amp;order=elect_ymd&amp;order_sort=desc"</span>
+
+<span class='va'>poster_html</span> <span class='op'>&lt;-</span> <span class='va'>poster_url</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>read_html</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>poster_buttons</span> <span class='op'>&lt;-</span> <span class='va'>poster_html</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'><a href='https://rvest.tidyverse.org/reference/html_nodes.html'>html_nodes</a></span><span class='op'>(</span>xpath <span class='op'>=</span> <span class='st'>'//*[@id="content"]/div[5]/ul'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'><a href='https://rvest.tidyverse.org/reference/html_nodes.html'>html_nodes</a></span><span class='op'>(</span>css <span class='op'>=</span> <span class='st'>"a"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'><a href='https://rvest.tidyverse.org/reference/html_text.html'>html_attr</a></span><span class='op'>(</span><span class='st'>"href"</span><span class='op'>)</span>
+
+<span class='va'>pdf_files</span> <span class='op'>&lt;-</span> <span class='va'>poster_buttons</span><span class='op'>[</span><span class='fu'>str_detect</span><span class='op'>(</span><span class='va'>poster_buttons</span>, pattern <span class='op'>=</span> <span class='st'>"start_file"</span><span class='op'>)</span><span class='op'>]</span> 
+
+<span class='va'>pdf_poster_files</span> <span class='op'>&lt;-</span> <span class='va'>pdf_files</span><span class='op'>[</span><span class='fu'>str_detect</span><span class='op'>(</span><span class='va'>pdf_files</span>, pattern <span class='op'>=</span> <span class='st'>"ECM0120170006"</span><span class='op'>)</span><span class='op'>]</span>    
+
+<span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"http://elecinfo.nec.go.kr{pdf_poster_files}"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0003
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0012
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0014
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0016
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0017
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0004
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0005
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0006
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0007
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0008
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0009
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0010
+http://elecinfo.nec.go.kr/neweps/common/download.do?svc_path_nm=/epdata/EP17/ECM2017/01/ECM0120170006&amp;epid=ECM0120170006&amp;start_file_sn=0011</code></pre>
+</div>
+<h2 id="벽보-이미지-함수">벽보 이미지 함수</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>get_image_address</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>p_number</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>poster_url</span> <span class='op'>&lt;-</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"http://elecinfo.nec.go.kr/neweps/3/1/paperSearch.do?chs=&amp;page=&amp;epType=&amp;start_file_sn=&amp;end_file_sn=&amp;svc_path_nm=&amp;epid=&amp;candidate_nm=&amp;elect_ymd=&amp;epdata_id=&amp;ctl_no_id=&amp;elect_sn=&amp;party_nm=&amp;win_yn=&amp;elecDe=&amp;turnDe=%B4%EB%C5%EB%B7%C9%BC%B1%B0%C5&amp;elecType=10&amp;code_id=10++&amp;elecTypeMax=20&amp;turnType=EPS0410++&amp;cityType=EPS0410{p_number}&amp;guType=&amp;sign_id={p_number}&amp;sido_nm=&amp;elect_region_nm=&amp;fieldName=candidate_nm&amp;category=tms120tbl&amp;myScraps=&amp;kwd=&amp;elecTypes=10&amp;electionType=on&amp;electionTurn=on&amp;pageSize=20&amp;order=elect_ymd&amp;order_sort=desc"</span><span class='op'>)</span>
+  
+  <span class='va'>poster_html</span> <span class='op'>&lt;-</span> <span class='va'>poster_url</span> <span class='op'>%&gt;%</span> 
+      <span class='fu'>read_html</span><span class='op'>(</span><span class='op'>)</span>
+  
+  <span class='va'>poster_buttons</span> <span class='op'>&lt;-</span> <span class='va'>poster_html</span> <span class='op'>%&gt;%</span> 
+      <span class='fu'><a href='https://rvest.tidyverse.org/reference/html_nodes.html'>html_nodes</a></span><span class='op'>(</span>xpath <span class='op'>=</span> <span class='st'>'//*[@id="content"]/div[5]/ul'</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+      <span class='fu'><a href='https://rvest.tidyverse.org/reference/html_nodes.html'>html_nodes</a></span><span class='op'>(</span>css <span class='op'>=</span> <span class='st'>"a"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+      <span class='fu'><a href='https://rvest.tidyverse.org/reference/html_text.html'>html_attr</a></span><span class='op'>(</span><span class='st'>"href"</span><span class='op'>)</span>
+  
+  <span class='va'>pdf_files</span> <span class='op'>&lt;-</span> <span class='va'>poster_buttons</span><span class='op'>[</span><span class='fu'>str_detect</span><span class='op'>(</span><span class='va'>poster_buttons</span>, pattern <span class='op'>=</span> <span class='st'>"start_file"</span><span class='op'>)</span><span class='op'>]</span> 
+  
+  <span class='va'>pdf_files_url</span> <span class='op'>&lt;-</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"http://elecinfo.nec.go.kr{pdf_files}"</span><span class='op'>)</span>
+  
+  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>pdf_files_url</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+
+<span class='co'># pdf_poster_files &lt;- pdf_files[str_detect(pdf_files, pattern = "ECM0120170006")]    </span>
+
+<span class='va'>p_number</span> <span class='op'>&lt;-</span> <span class='fu'>str_pad</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>19</span>, width <span class='op'>=</span> <span class='fl'>2</span>, side <span class='op'>=</span> <span class='st'>"left"</span>, pad <span class='op'>=</span> <span class='st'>"0"</span><span class='op'>)</span>
+
+<span class='va'>poster_url_vec</span> <span class='op'>&lt;-</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>p_number</span>, <span class='va'>get_image_address</span><span class='op'>)</span>
+
+<span class='va'>poster_url_vec</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>write_rds</span><span class='op'>(</span><span class='st'>"data/poster/poster_url_vec.rds"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h2 id="벽보-이미지-다운로드">벽보 이미지 다운로드</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>all_poster_tbl</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"data/all_poster_tbl.csv"</span><span class='op'>)</span>
+<span class='va'>poster_url_vec</span> <span class='op'>&lt;-</span> <span class='fu'>read_rds</span><span class='op'>(</span><span class='st'>"data/poster/poster_url_vec.rds"</span><span class='op'>)</span>
+
+<span class='co'>## 제 6 대 대통령선거 -------</span>
+<span class='va'>six_poster_tbl</span> <span class='op'>&lt;-</span> <span class='va'>all_poster_tbl</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>기호 <span class='op'>=</span> <span class='fu'>str_remove_all</span><span class='op'>(</span><span class='va'>기호</span>, <span class='st'>"기호\\s+"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>선거</span> <span class='op'>==</span> <span class='st'>"6대"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>image_url <span class='op'>=</span> <span class='va'>poster_url_vec</span><span class='op'>[[</span><span class='fl'>6</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>filename  <span class='op'>=</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"data/poster/{선거}_{후보}_{기호}.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>map2</span><span class='op'>(</span><span class='va'>six_poster_tbl</span><span class='op'>$</span><span class='va'>image_url</span>, <span class='va'>six_poster_tbl</span><span class='op'>$</span><span class='va'>filename</span>, <span class='va'>download.file</span>, mode <span class='op'>=</span> <span class='st'>"wb"</span><span class='op'>)</span>
+
+<span class='co'>## 제 13 대 대통령선거 -------</span>
+<span class='va'>poster_13_tbl</span> <span class='op'>&lt;-</span> <span class='va'>all_poster_tbl</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>기호 <span class='op'>=</span> <span class='fu'>str_remove_all</span><span class='op'>(</span><span class='va'>기호</span>, <span class='st'>"기호\\s+"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>선거</span> <span class='op'>==</span> <span class='st'>"13대"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>image_url <span class='op'>=</span> <span class='va'>poster_url_vec</span><span class='op'>[[</span><span class='fl'>13</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>filename  <span class='op'>=</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"data/poster/{선거}_{후보}_{기호}.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>map2</span><span class='op'>(</span><span class='va'>poster_13_tbl</span><span class='op'>$</span><span class='va'>image_url</span>, <span class='va'>poster_13_tbl</span><span class='op'>$</span><span class='va'>filename</span>, <span class='va'>download.file</span>, mode <span class='op'>=</span> <span class='st'>"wb"</span><span class='op'>)</span>
+
+<span class='co'>## 제 14 대 대통령선거 -------</span>
+<span class='va'>poster_14_tbl</span> <span class='op'>&lt;-</span> <span class='va'>all_poster_tbl</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>기호 <span class='op'>=</span> <span class='fu'>str_remove_all</span><span class='op'>(</span><span class='va'>기호</span>, <span class='st'>"기호\\s+"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>선거</span> <span class='op'>==</span> <span class='st'>"14대"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>image_url <span class='op'>=</span> <span class='va'>poster_url_vec</span><span class='op'>[[</span><span class='fl'>14</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>filename  <span class='op'>=</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"data/poster/{선거}_{후보}_{기호}.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>map2</span><span class='op'>(</span><span class='va'>poster_14_tbl</span><span class='op'>$</span><span class='va'>image_url</span>, <span class='va'>poster_14_tbl</span><span class='op'>$</span><span class='va'>filename</span>, <span class='va'>download.file</span>, mode <span class='op'>=</span> <span class='st'>"wb"</span><span class='op'>)</span>
+
+<span class='co'>## 제 15 대 대통령선거 -------</span>
+<span class='va'>poster_15_tbl</span> <span class='op'>&lt;-</span> <span class='va'>all_poster_tbl</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>기호 <span class='op'>=</span> <span class='fu'>str_remove_all</span><span class='op'>(</span><span class='va'>기호</span>, <span class='st'>"기호\\s+"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>선거</span> <span class='op'>==</span> <span class='st'>"15대"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>image_url <span class='op'>=</span> <span class='va'>poster_url_vec</span><span class='op'>[[</span><span class='fl'>15</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>filename  <span class='op'>=</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"data/poster/{선거}_{후보}_{기호}.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>map2</span><span class='op'>(</span><span class='va'>poster_15_tbl</span><span class='op'>$</span><span class='va'>image_url</span>, <span class='va'>poster_15_tbl</span><span class='op'>$</span><span class='va'>filename</span>, <span class='va'>download.file</span>, mode <span class='op'>=</span> <span class='st'>"wb"</span><span class='op'>)</span>
+
+<span class='co'>## 제 16 대 대통령선거 -------</span>
+<span class='va'>poster_16_tbl</span> <span class='op'>&lt;-</span> <span class='va'>all_poster_tbl</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>기호 <span class='op'>=</span> <span class='fu'>str_remove_all</span><span class='op'>(</span><span class='va'>기호</span>, <span class='st'>"기호\\s+"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>선거</span> <span class='op'>==</span> <span class='st'>"16대"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>image_url <span class='op'>=</span> <span class='va'>poster_url_vec</span><span class='op'>[[</span><span class='fl'>16</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>filename  <span class='op'>=</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"data/poster/{선거}_{후보}_{기호}.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>map2</span><span class='op'>(</span><span class='va'>poster_16_tbl</span><span class='op'>$</span><span class='va'>image_url</span>, <span class='va'>poster_16_tbl</span><span class='op'>$</span><span class='va'>filename</span>, <span class='va'>download.file</span>, mode <span class='op'>=</span> <span class='st'>"wb"</span><span class='op'>)</span>
+
+<span class='co'>## 제 17 대 대통령선거 -------</span>
+<span class='va'>poster_url_tmp</span> <span class='op'>&lt;-</span> <span class='va'>poster_url_vec</span><span class='op'>[[</span><span class='fl'>17</span><span class='op'>]</span><span class='op'>]</span> 
+<span class='va'>poster_17_urls</span> <span class='op'>&lt;-</span> <span class='va'>poster_url_tmp</span><span class='op'>[</span><span class='fu'>str_detect</span><span class='op'>(</span><span class='va'>poster_url_tmp</span>, pattern <span class='op'>=</span> <span class='st'>"ECM0120080029"</span><span class='op'>)</span><span class='op'>]</span>    
+
+<span class='va'>poster_17_tbl</span> <span class='op'>&lt;-</span> <span class='va'>all_poster_tbl</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>기호 <span class='op'>=</span> <span class='fu'>str_remove_all</span><span class='op'>(</span><span class='va'>기호</span>, <span class='st'>"기호\\s+"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>선거</span> <span class='op'>==</span> <span class='st'>"17대"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>image_url <span class='op'>=</span> <span class='va'>poster_17_urls</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>filename  <span class='op'>=</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"data/poster/{선거}_{후보}_{기호}.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>map2</span><span class='op'>(</span><span class='va'>poster_17_tbl</span><span class='op'>$</span><span class='va'>image_url</span>, <span class='va'>poster_17_tbl</span><span class='op'>$</span><span class='va'>filename</span>, <span class='va'>download.file</span>, mode <span class='op'>=</span> <span class='st'>"wb"</span><span class='op'>)</span>
+
+<span class='co'>## 제 18 대 대통령선거 -------</span>
+<span class='va'>poster_url_tmp</span> <span class='op'>&lt;-</span> <span class='va'>poster_url_vec</span><span class='op'>[[</span><span class='fl'>18</span><span class='op'>]</span><span class='op'>]</span> 
+<span class='va'>poster_18_urls</span> <span class='op'>&lt;-</span> <span class='va'>poster_url_tmp</span><span class='op'>[</span><span class='fu'>str_detect</span><span class='op'>(</span><span class='va'>poster_url_tmp</span>, pattern <span class='op'>=</span> <span class='st'>"ECM0120121025"</span><span class='op'>)</span><span class='op'>]</span>    
+
+<span class='va'>poster_18_tbl</span> <span class='op'>&lt;-</span> <span class='va'>all_poster_tbl</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>기호 <span class='op'>=</span> <span class='fu'>str_remove_all</span><span class='op'>(</span><span class='va'>기호</span>, <span class='st'>"기호\\s+"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>선거</span> <span class='op'>==</span> <span class='st'>"18대"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>image_url <span class='op'>=</span> <span class='va'>poster_18_urls</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>filename  <span class='op'>=</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"data/poster/{선거}_{후보}_{기호}.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>map2</span><span class='op'>(</span><span class='va'>poster_18_tbl</span><span class='op'>$</span><span class='va'>image_url</span>, <span class='va'>poster_18_tbl</span><span class='op'>$</span><span class='va'>filename</span>, <span class='va'>download.file</span>, mode <span class='op'>=</span> <span class='st'>"wb"</span><span class='op'>)</span>
+
+<span class='co'>## 제 19 대 대통령선거 -------</span>
+<span class='va'>poster_url_tmp</span> <span class='op'>&lt;-</span> <span class='va'>poster_url_vec</span><span class='op'>[[</span><span class='fl'>19</span><span class='op'>]</span><span class='op'>]</span> 
+<span class='va'>poster_19_urls</span> <span class='op'>&lt;-</span> <span class='va'>poster_url_tmp</span><span class='op'>[</span><span class='fu'>str_detect</span><span class='op'>(</span><span class='va'>poster_url_tmp</span>, pattern <span class='op'>=</span> <span class='st'>"ECM0120170006"</span><span class='op'>)</span><span class='op'>]</span>    
+
+<span class='va'>poster_19_tbl</span> <span class='op'>&lt;-</span> <span class='va'>all_poster_tbl</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>기호 <span class='op'>=</span> <span class='fu'>str_remove_all</span><span class='op'>(</span><span class='va'>기호</span>, <span class='st'>"기호\\s+"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>선거</span> <span class='op'>==</span> <span class='st'>"19대"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>image_url <span class='op'>=</span> <span class='va'>poster_19_urls</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>filename  <span class='op'>=</span> <span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"data/poster/{선거}_{후보}_{기호}.pdf"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>map2</span><span class='op'>(</span><span class='va'>poster_19_tbl</span><span class='op'>$</span><span class='va'>image_url</span>, <span class='va'>poster_19_tbl</span><span class='op'>$</span><span class='va'>filename</span>, <span class='va'>download.file</span>, mode <span class='op'>=</span> <span class='st'>"wb"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h1 id="merge-pdfs">벽보 결합</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/pdftools'>pdftools</a></span><span class='op'>)</span>
+
+<span class='va'>poster_pdf_filepath</span> <span class='op'>&lt;-</span> <span class='fu'>fs</span><span class='fu'>::</span><span class='fu'><a href='http://fs.r-lib.org/reference/dir_ls.html'>dir_ls</a></span><span class='op'>(</span>path <span class='op'>=</span> <span class='st'>"data/poster"</span>, glob <span class='op'>=</span> <span class='st'>"*.pdf"</span><span class='op'>)</span>
+
+<span class='fu'>walk</span><span class='op'>(</span><span class='va'>poster_pdf_filepath</span>, <span class='va'>pdf_combine</span>, output <span class='op'>=</span>  <span class='st'>"data/poster.pdf"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/include_graphics.html'>include_graphics</a></span><span class='op'>(</span><span class='st'>"data/poster.pdf"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<embed src="data/poster.pdf" width="800px" height="1200px" type="application/pdf" />
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

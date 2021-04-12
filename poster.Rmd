@@ -302,7 +302,7 @@ poster_pdf_filepath <- fs::dir_ls(path = "data/poster", glob = "*.pdf")
 walk(poster_pdf_filepath, pdf_combine, output =  "data/poster.pdf")
 ```
 
-```{r embed-pdf, out.height = "460px", out.width='800px', echo=TRUE}
+```{r embed-pdf, out.height = "1200px", out.width='800px', echo=TRUE}
 knitr::include_graphics("data/poster.pdf")
 ```
 
