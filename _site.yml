@@ -13,6 +13,8 @@ navbar:
         href: data_2019.html
       - text: "벽보"
         href: poster.html
+      - text: "공보물"
+        href: public_info.html
       - text: "부동산"
         href: apt.html
     - text: "서울시장"

@@ -1,0 +1,128 @@
+---
+title: "공보물"
+description: |
+  선관위 웹사이트에서 공개된 대선 공보물을 데이터로 만듧니다.
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(rvest)
+library(httr)
+
+```
+
+
+# 공보물 PDF 데이터 {#poster-data}
+
+중앙선거관리위원회 선거정보도서관, ["후보자 선전물"](http://elecinfo.nec.go.kr/neweps/3/1/paper.do) 벽보, 공보, 공약서 등 후보자 선전물 검색하여 데이터로 만듧니다.
+
+## 제 19 대 대통령 {#president-19}
+
+```{r crawl-poster}
+library(tidyverse)
+library(rvest)
+library(httr)
+
+poster_president_19_tbl <- read_csv("data/poster_president_19_tbl.csv")
+```
+
+
+## 대통령 공보물 가져오기 {#president-poster-function}
+
+가장 최근 제19대 대통령 선거 공보물을 가져온다. 
+
+## 벽보 공보물 위치 
+
+```{r download-public-info-pdf}
+
+public_info_url <- "http://elecinfo.nec.go.kr/neweps/3/1/paperSearch.do?chs=&page=&epType=&start_file_sn=&end_file_sn=&svc_path_nm=&epid=&candidate_nm=&elect_ymd=&epdata_id=&ctl_no_id=&elect_sn=&party_nm=&win_yn=&elecDe=&turnDe=%B4%EB%C5%EB%B7%C9%BC%B1%B0%C5&elecType=10&code_id=10++&elecTypeMax=20&turnType=EPS0410++&cityType=EPS041019&guType=&sign_id=19&sido_nm=&elect_region_nm=&fieldName=candidate_nm&category=tms120tbl&myScraps=&kwd=&elecTypes=10&electionType=on&electionTurn=on&pageSize=20&order=elect_ymd&order_sort=desc"
+
+public_info_html <- public_info_url %>% 
+    read_html()
+
+public_info_buttons <- public_info_html %>% 
+    html_nodes(xpath = '//*[@id="content"]/div[5]/ul') %>% 
+    html_nodes(css = "a") %>% 
+    html_attr("href")
+
+public_info_pdf_files <- public_info_buttons[str_detect(public_info_buttons, pattern = "start_file")] 
+
+public_info_pdf_files <- public_info_pdf_files[str_detect(public_info_pdf_files, pattern = "ECM0120170001")]    
+
+public_info_pdf_url <- glue::glue("http://elecinfo.nec.go.kr{public_info_pdf_files}")
+
+public_info_pdf_url
+```
+
+## 공보물 PDF 파일 함수 
+
+```{r download-public-info-function, eval = FALSE}
+
+get_public_info_url <- function(p_number) {
+    public_info_url <- glue::glue("http://elecinfo.nec.go.kr/neweps/3/1/paperSearch.do?chs=&page=&epType=&start_file_sn=&end_file_sn=&svc_path_nm=&epid=&candidate_nm=&elect_ymd=&epdata_id=&ctl_no_id=&elect_sn=&party_nm=&win_yn=&elecDe=&turnDe=%B4%EB%C5%EB%B7%C9%BC%B1%B0%C5&elecType=10&code_id=10++&elecTypeMax=20&turnType=EPS0410++&cityType=EPS0410{p_number}&guType=&sign_id={p_number}&sido_nm=&elect_region_nm=&fieldName=candidate_nm&category=tms120tbl&myScraps=&kwd=&elecTypes=10&electionType=on&electionTurn=on&pageSize=20&order=elect_ymd&order_sort=desc")
+  
+  public_info_html <- public_info_url %>% 
+      read_html()
+  
+  public_info_buttons <- public_info_html %>% 
+      html_nodes(xpath = '//*[@id="content"]/div[5]/ul') %>% 
+      html_nodes(css = "a") %>% 
+      html_attr("href")
+  
+  public_info_pdf_files <- public_info_buttons[str_detect(public_info_buttons, pattern = "start_file")] 
+  
+  if (p_number =="19") {
+    public_info_pdf_files <- public_info_pdf_files[str_detect(public_info_pdf_files, pattern = "ECM0120170001")]
+  } else if (p_number =="18") {
+    public_info_pdf_files <- public_info_pdf_files[str_detect(public_info_pdf_files, pattern = "ECM0120120040")]
+  }
+      
+  public_info_pdf_url <- glue::glue("http://elecinfo.nec.go.kr{public_info_pdf_files}")
+  
+  return(public_info_pdf_url)
+}
+# get_public_info_url("18")
+get_public_info_url("19")
+```
+
+## 공보물 PDF 다운로드 
+
+```{r public-info-donot-run, eval = FALSE}
+all_poster_tbl <- read_csv("data/all_poster_tbl.csv")
+
+## 제 19 대 대통령선거 -------
+public_info_19_tbl <- all_poster_tbl %>% 
+  mutate(기호 = str_remove_all(기호, "기호\\s+")) %>% 
+  filter(선거 == "19대") %>% 
+  mutate(pdf_url = get_public_info_url("19") ) %>% 
+  mutate(filename  = glue::glue("data/public_info/{선거}_{후보}_{기호}.pdf"))
+
+map2(public_info_19_tbl$pdf_url, public_info_19_tbl$filename, download.file, mode = "wb")
+
+## 제 18 대 대통령선거 -------
+public_info_18_tbl <- all_poster_tbl %>% 
+  mutate(기호 = str_remove_all(기호, "기호\\s+")) %>% 
+  filter(선거 == "18대") %>% 
+  mutate(pdf_url = get_public_info_url("18") ) %>% 
+  mutate(filename  = glue::glue("data/public_info/{선거}_{후보}_{기호}.pdf"))
+
+map2(public_info_18_tbl$pdf_url, public_info_18_tbl$filename, download.file, mode = "wb")
+```
+
+
+# 공보물 결합 {#public-info-pdfs}
+
+```{r public-info-pdf, out.height = "1000px", out.width='800px', echo=TRUE}
+knitr::include_graphics("data/public_info/19대_문재인_1번.pdf")
+```
+
+## PDF 공보물 살펴보기 
+
+```{r pdf-public-info}
+fs::dir_tree(path = "data/public_info/")
+```
+
